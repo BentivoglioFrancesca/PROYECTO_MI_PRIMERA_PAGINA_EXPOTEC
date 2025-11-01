@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Expotec - Aprender a programar</title>
+
+    <style>
+        body {
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, #d4b9ff, #fff);
+            display: flex;
+            justify-content: space-between;
+            padding: 25px;
+        }
+
+        .vista-linda {
+            width: 45%;
+            background: white;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .editor {
+            width: 50%;
+            background: #ffffffaa;
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.15);
+            animation: aparecer 0.8s ease;
+        }
+
+        @keyframes aparecer {
+            from {opacity: 0; transform: translateY(20px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+
+        textarea {
+            width: 100%;
+            height: 220px;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 14px;
+            font-family: monospace;
+            border: 1px solid #bbb;
+            resize: none;
+        }
+
+        iframe {
+            margin-top: 15px;
+            width: 100%;
+            height: 250px;
+            border-radius: 10px;
+            border: 1px solid #bbb;
+            background: white;
+        }
+
+        button {
+            margin: 5px;
+            padding: 8px 12px;
+            background: #c196ff;
+            border: none;
+            border-radius: 8px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: white;
+            font-weight: bold;
+        }
+
+        button:hover {
+            background: #a46cff;
+            transform: scale(1.05);
+        }
+
+        .misiones {
+            margin-top: 10px;
+            background: #fff;
+            padding: 10px;
+            border-radius: 10px;
+            border-left: 5px solid #a46cff;
+        }
+
+        .success {
+            background: #c4ffde;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+            font-size: 18px;
+            color: #08783c;
+            font-weight: bold;
+            border: 2px solid #08a34e;
+            animation: pop 0.5s ease;
+            text-align: center;
+            box-shadow: 0 0 15px rgba(0,255,100,0.4);
+        }
+
+        @keyframes pop {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="vista-linda">
+        <h1 style="color:#7a3cff;">Bienvenid@s a la Expotec</h1>
+        <p>Acá vas a aprender cómo funciona una página web.</p>
+        <p>Probá, cambiá, borrá. Preguntanos cualquier cosa!</p>
+
+        <div class="misiones">
+            <h3>✅ MISIONES:</h3>
+            <p>⭐ 1. Cambiá el color de el texto</p>
+            <p>⭐ 2. Poné tu nombre en un título</p>
+            <p>⭐ 3. Agregá una imagen</p>
+            <p>⭐ 4. Creá un botón que diga tu nombre</p>
+            <p>⭐ 5. Agregá los emoji</p>
+        </div>
+
+        <p class="success" id="felicitaciones">🎉 ¡MISIÓN COMPLETADA! Felicitaciones! 💻</p>
+    </div>
+
+    <div class="editor">
+        <h2>Zona de Programación 💻</h2>
+
+        <button onclick="agregar('<h1>Mi título</h1>')">Añadir título</button>
+        <button onclick="agregar('<p>Un texto nuevo por acá</p>')">Añadir párrafo</button>
+
+        <button onclick="agregar('<img src=\'https://i.pinimg.com/736x/3d/0e/5c/3d0e5c41655d904bf6be426c49cbb93e.jpg\' width=\'170\'>')">
+            Añadir imagen
+        </button>
+
+        <button onclick="agregar('<p style=\'color:blue;\'>Texto azul</p>')">Texto azul</button>
+        <button onclick="agregar('<button>Mi botón</button>')">Botón</button>
+        <button onclick="agregar('😎🔥✨')">Añadir emoji</button>
+
+        <button onclick="restaurar()" style="background:#ff6d6d;">Restaurar código</button>
+
+        <textarea id="codigo">
+<h2 style="color: red;">Hola! Cambiame 😎</h2>
+<p>Probá agregar cosas con los botones de arriba</p>
+        </textarea>
+
+        <iframe id="resultado"></iframe>
+    </div>
+
+    <!-- Confetti -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+
+    <script>
+        const caja = document.getElementById("codigo");
+        const vista = document.getElementById("resultado");
+        const felicitaciones = document.getElementById("felicitaciones");
+        const original = caja.value;
+
+        function actualizar() {
+            vista.srcdoc = caja.value;
+
+            if (caja.value.includes("style=") && caja.value.includes("<img") && caja.value.includes("<button")) {
+                if (felicitaciones.style.display !== "block") {
+                    felicitaciones.style.display = "block";
+
+                    confetti({
+                        particleCount: 150,
+                        spread: 75,
+                        origin: { y: 0.6 }
+                    });
+                }
+            }
+        }
+
+        function agregar(texto) {
+            caja.value += "\n" + texto;
+            actualizar();
+        }
+
+        function restaurar() {
+            caja.value = original;
+            felicitaciones.style.display = "none";
+            actualizar();
+        }
+
+        caja.addEventListener("input", actualizar);
+        actualizar();
+    </script>
+
+</body>
+</html>
